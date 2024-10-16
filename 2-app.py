@@ -35,7 +35,8 @@ def download_dir(local_path, s3_prefix):
 
 
 
-st.title("Machine Learning Model Deployment at Streamlit Server")
+st.title("Sentiment Analysis Prediction Using TinyBERT")
+
 if not os.path.exists("./tinybert-sentiment-analysis"):
     button = st.button("Download Model")
 
@@ -44,7 +45,6 @@ if not os.path.exists("./tinybert-sentiment-analysis"):
         with st.spinner("Downloading... Please wait!"):
             download_dir(local_path, s3_prefix)
 
-st.subheader("Sentiment Analysis Prediction")
 text = st.text_area("Enter text", "Type Here")
 
 predict = st.button("Predict")

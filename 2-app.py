@@ -6,10 +6,7 @@ import os
 from transformers import pipeline
 import torch
 
-device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-
-classifier = pipeline('text-classification', model='tinybert-sentiment-analysis', device = device)
 
 s3 = boto3.client('s3')
 
@@ -50,6 +47,9 @@ if button:
 text = st.text_area("Enter text", "Type Here")
 
 predict = st.button("Predict")
+
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+classifier = pipeline('text-classification', model='tinybert-sentiment-analysis', device = device)
 
 if predict:
     with st.spinner("Predicting..."):  

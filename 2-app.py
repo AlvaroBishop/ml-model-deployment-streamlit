@@ -36,14 +36,15 @@ def download_dir(local_path, s3_prefix):
 
 
 st.title("Machine Learning Model Deployment at Streamlit Server")
+if not os.path.exists("./tinybert-sentiment-analysis"):
+    button = st.button("Download Model")
 
-button = st.button("Download Model")
+    if button:
+        # Loading spinner
+        with st.spinner("Downloading... Please wait!"):
+            download_dir(local_path, s3_prefix)
 
-if button:
-    # Loading spinner
-    with st.spinner("Downloading... Please wait!"):
-        download_dir(local_path, s3_prefix)
-
+st.subheader("Sentiment Analysis Prediction")
 text = st.text_area("Enter text", "Type Here")
 
 predict = st.button("Predict")
@@ -52,10 +53,13 @@ device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cp
 classifier = pipeline('text-classification', model='tinybert-sentiment-analysis', device = device)
 
 if predict:
-    with st.spinner("Predicting..."):  
-        output = classifier(text)
+    if text == "Type Here":
+        st.warning("Please enter valid text before making a prediction.")
+    else:
+        with st.spinner("Predicting..."):  
+            output = classifier(text)
 
-        st.write(output)
+            st.write(f"The model predicts that the text is: **{output[0]['label']}** with **{output[0]['score'] * 100:.2f}%** confidence")
 
 
 
